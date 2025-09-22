@@ -11,6 +11,6 @@ class PacsServerConfig(AppConfig):
         from dicom_router import settings
 
         logger.info("Starting PACS Server...")
-        pacs_server = PACSServer(logger, settings.DICOM_PORT)
+        pacs_server = PACSServer(settings.DICOM_PORT)
         pacs_server.start_server()
         logger.info(f"PACS Server started on port {settings.DICOM_PORT}")
