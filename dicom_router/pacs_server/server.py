@@ -7,7 +7,7 @@ from pynetdicom.sop_class import Verification
 from pynetdicom import (AE, debug_logger, evt, AllStoragePresentationContexts)
 
 
-class DicomServer:
+class PACSServer:
     def __init__(self, logger: Logger, dicom_port: int) -> None:
         self.__logger = logger
         self.__dicom_port = dicom_port
