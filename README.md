@@ -14,6 +14,6 @@ This tool helps integrate imaging workflows by automatically forwarding studies 
 
 ---
 
-### Developed by
-Naser Erfani
+## Developed by
+Naser Erfani  
 📧 naserfuni@gmail.com
