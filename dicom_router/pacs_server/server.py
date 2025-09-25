@@ -1,15 +1,14 @@
 import os
 from typing import List
-from core.handler import Handler
-from lib.logger import Logger
+from pacs_server.handler import Handler
+from loguru import logger
 from pynetdicom.sop_class import Verification
 
 from pynetdicom import (AE, debug_logger, evt, AllStoragePresentationContexts)
 
 
 class PACSServer:
-    def __init__(self, logger: Logger, dicom_port: int) -> None:
-        self.__logger = logger
+    def __init__(self, dicom_port: int) -> None:
         self.__dicom_port = dicom_port
         self.__SUPPORTED_TRANSFER_SYNTAX: List[str] = [
             '1.2.840.10008.1.2',  # Implicit VR Little Endian,
@@ -45,12 +44,10 @@ class PACSServer:
             try:
                 debug_logger()
 
-                handler = Handler(self.__logger)
-                self.__logger.log.info(
-                    " -----  DICOM RECEIVER FUNCTION  ----- ")
+                handler = Handler()
+                logger.info(" -----  DICOM RECEIVER FUNCTION  ----- ")
                 handlers = [(evt.EVT_C_ECHO, handler.handle_echo),
-                            (evt.EVT_C_STORE, handler.handle_mammography_store),
-                            (evt.EVT_C_FIND, handler.handle_mammography_find)]
+                            (evt.EVT_C_STORE, handler.handle_store)]
 
                 ae = AE()
                 ae.supported_contexts = AllStoragePresentationContexts
@@ -59,14 +56,12 @@ class PACSServer:
                 for ctx in ae.supported_contexts:
                     ctx.transfer_syntax = self.__SUPPORTED_TRANSFER_SYNTAX[:]
 
-                self.__logger.log.success(
-                    "DICOM SERVER RUNNING ON PORT [  %s  ]" % self.__dicom_port)
-                self.__logger.log.success("STARTING AE SERVER... ")
+                logger.success("DICOM SERVER RUNNING ON PORT [  %s  ]" % self.__dicom_port)
+                logger.success("STARTING AE SERVER... ")
                 scp = ae.start_server(
                     ('', self.__dicom_port), block=True, evt_handlers=handlers)
 
                 ae.QuitOnKeyboardInterrupt()
 
             except (KeyboardInterrupt, SystemExit) as err:
-                self.__logger.log.exception(
-                    'DICOM EXITED OR KEYBOARD INTERRUPT', err)
+                logger.exception('DICOM EXITED OR KEYBOARD INTERRUPT')

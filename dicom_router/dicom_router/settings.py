@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 
@@ -129,3 +129,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 DICOM_PORT = os.getenv('DICOM_PORT', 104)
+DICOM_AE_TITLE = os.getenv('DICOM_AE_TITLE', 'DICOM_ROUTER')
+
+# Maximum disk usage percentage before rejecting new DICOM files
+MAX_DISK_USAGE = int(os.getenv('MAX_DISK_USAGE', 98))
+DISK_STORAGE_PATH = os.getenv('DISK_STORAGE_PATH', '/dicom_storage')
